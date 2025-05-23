@@ -1,0 +1,6 @@
+[submodule "google-mcp-security"]
+	path = google-mcp-security
+	url = https://github.com/repulsivityy/google-mcp-security.git
+[submodule "ai-runbooks"]
+	path = ai-runbooks
+	url = https://github.com/repulsivityy/ai-runbooks.git
