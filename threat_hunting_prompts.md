@@ -18,9 +18,9 @@
 * Understanding Campaigns + Hunting Packages (Operational / Tactical)
 > Based on this report <insert link>, summarise the report for a threat intelligence analyst. Please output the following: - any ttps/behaviours in the report - any indicators / iocs in the report in a table format. If there are any TTPs that we can use, convert them into a cyber threat hunting package based on YARA-L. Leverage Sysmon event data primarily when creating YARA-L rules
 
-* Understanding campaigns for hypothesis
-```
-You are a threat hunter. Provide a list of hypotheses that we can test based on the following campaign report <insert link>. For each hypothesis, provide a list of data sources that we can use to test the hypothesis. 
+* Understanding campaigns for hypothesis>
+> You are a threat hunter. Provide a list of hypotheses that we can test based on the following campaign report <insert link>. 
+For each hypothesis, provide a list of data sources that we can use to test the hypothesis. 
 
 <table_structure>
 | Procedure | Description | Logs |
@@ -34,4 +34,3 @@ You are a threat hunter. Provide a list of hypotheses that we can test based on 
 - Focus on specific search patterns
 - Avoid generic or ambiguous information
 - Include citations
-```
