@@ -162,8 +162,7 @@ AI-powered phishing represents an evolving threat that significantly increases t
     - "How are we adapting our human defenses against the new wave of AI-powered social engineering?"
     - "What proactive measures are being taken to counter increasingly sophisticated phishing attacks?"
 
----
----
+---  
 
 # Role: Threat Intelligence AI Agent
 > This is a prompt that covers a wide range of capabilities, and is designed to be a comprehensive guide for the AI agent, covering threat detection rules as well. 
