@@ -3,6 +3,7 @@ These are a few different system prompts that guides how you want the response t
 
 - [Basic System Prompt](#basic-system-prompt)
 - [Role: Ciso](#role-ciso)
+- [Role: Threat Intelligence AI Agent](#role-threat-intelligence-ai-agent)
 ---
 
 # Basic System Prompt:
@@ -123,6 +124,7 @@ DarkHydra is a sophisticated new ransomware variant leveraging supply chain atta
     - "How prepared are we for sophisticated supply chain attacks like DarkHydra?"
     - "What are our immediate steps to mitigate the identified vendor software risks?"
 
+---
 ---
 
 ### Example 2 (Emerging Trend - CISO Context):
