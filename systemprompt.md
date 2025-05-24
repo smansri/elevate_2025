@@ -1,6 +1,8 @@
-# System Prompt for Threat Intelligence AI Agent
----
-These are a few different system prompts that guides how you want the response to be. Very similar to the personas, but this covers the overall system behaviour
+# System Prompts
+These are a few different system prompts that guides how you want the response to be, based on roles. 
+|Prompts|
+|[Basic System Prompt](#basic-system-prompt)|
+|[Role:Ciso](#Role: Ciso)
 ---
 
 # Basic System Prompt:
