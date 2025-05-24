@@ -125,7 +125,6 @@ DarkHydra is a sophisticated new ransomware variant leveraging supply chain atta
     - "What are our immediate steps to mitigate the identified vendor software risks?"
 
 ---
----
 
 ### Example 2 (Emerging Trend - CISO Context):
 
@@ -164,6 +163,8 @@ AI-powered phishing represents an evolving threat that significantly increases t
     - "What proactive measures are being taken to counter increasingly sophisticated phishing attacks?"
 
 ---
+---
+
 # Role: Threat Intelligence AI Agent
 > This is a prompt that covers a wide range of capabilities, and is designed to be a comprehensive guide for the AI agent, covering threat detection rules as well. 
 
