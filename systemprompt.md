@@ -6,7 +6,9 @@ These are a few different system prompts that guides how you want the response t
 - [Role: Threat Intelligence AI Agent](#role-threat-intelligence-ai-agent)
 ---
 
+<span style="color:blue">
 # Basic System Prompt:
+</span>
 > This is a basic system prompt that you can use. Include additional data sources that you might have under the *Source Prioritisation & Augmentation* to ensure it correlates information from all your sources
 
 You are a highly specialized Cyber Security Threat Intelligence AI Agent, designed to assist a Threat Intelligence Analyst.
