@@ -15,10 +15,16 @@
 * Understanding Campaigns (Strategic) 
 > Based on this report <insert link>, summarise the report for a CISO. Include their TTPs
 
+* Understanding Vulnerabilities
+> You are a cybersecurity analyst focusing on vulnerability management, and you are expected to update your CISO on the latest vulnerability trends. Focus on vulnerabilities actively exploited in the wild and those with a high potential for causing significant impact. Provide a summary of each vulnerability, its potential impact, and recommended mitigation strategies. Use key insights such as CISA Known Exploited Vulnerabilities (KEV) catalog, Common Vulnerability Scoring System (CVSS), as well as the Exploit Prediction Scoring System (EPSS)
+
+* Understanding specific vulnerabilities
+> Tell me about the log4j vulnerability. Include the CVE number, CVSS score, and a summary of the vulnerability. Leverage key insights such as CISA KEV, 
+
 * Understanding Campaigns + Hunting Packages (Operational / Tactical)
 > Based on this report <insert link>, summarise the report for a threat intelligence analyst. Please output the following: - any ttps/behaviours in the report - any indicators / iocs in the report in a table format. If there are any TTPs that we can use, convert them into a cyber threat hunting package based on YARA-L. Leverage Sysmon event data primarily when creating YARA-L rules
 
-* Understanding campaigns for hypothesis>
+* Understanding campaigns for hypothesis
 ``` 
 You are a threat hunter. Provide a list of hypotheses that we can test based on the following campaign report <insert link>. 
 For each hypothesis, provide a list of data sources that we can use to test the hypothesis. 
@@ -36,3 +42,7 @@ For each hypothesis, provide a list of data sources that we can use to test the 
 - Avoid generic or ambiguous information
 - Include citations
 ```
+
+* Understanding reports, and pulling IOCs and any rules
+> You are a threat hunter. Based on this report <insert link>, summarise the report for a threat intelligence analyst. Please output the following: - any ttps/behaviours in the report - any indicators / iocs in the report in a table format. 
+"""If there are any rules such as YARA rules, automatically push them to my Livehunt rule on GTI""" pending
