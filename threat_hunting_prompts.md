@@ -8,6 +8,9 @@
 * Unusual traffic patterns
 > Identify unusual network traffic patterns, such as spikes in data transfer or connections to unfamiliar IP addresses in the past 30 days
 
+* Suspicious Process Execution
+> Show me all processes launched from temp directories, user profile AppData in the last 7 days. Inlcude the process name, associated username, full commandline, and timestamp. Examine any suspicious behaviours - such as command line utilities - and enrich these indicators with gti. Provide the child processes should gti returns a verdict of suspicious or malicious. 
+
 ## Threat Intelligence
 * Understanding Malware
 > Tell me more about Ransomhub Ransomware. Include their TTPs, threat actors observed to have used them, and any known IOCs first seen in the past 30 days. 
@@ -16,10 +19,10 @@
 > Based on this report <insert link>, summarise the report for a CISO. Include their TTPs
 
 * Understanding Vulnerabilities
-> You are a cybersecurity analyst focusing on vulnerability management, and you are expected to update your CISO on the latest vulnerability trends. Focus on vulnerabilities actively exploited in the wild and those with a high potential for causing significant impact. Provide a summary of each vulnerability, its potential impact, and recommended mitigation strategies. Use key insights such as CISA Known Exploited Vulnerabilities (KEV) catalog, Common Vulnerability Scoring System (CVSS), as well as the Exploit Prediction Scoring System (EPSS)
+> You are a cybersecurity analyst focusing on vulnerability management, and you are expected to update your CISO on the latest vulnerability trends. Focus on vulnerabilities actively exploited in the wild and those with a high potential for causing significant impact. Provide a summary of each vulnerability, its potential impact, and recommended mitigation strategies. Use key insights such as CISA Known Exploited Vulnerabilities (KEV) catalog, Common Vulnerability Scoring System (CVSS), as well as theExploit Prediction Scoring System (EPSS)
 
 * Understanding specific vulnerabilities
-> Tell me about the log4j vulnerability. Include the CVE number, CVSS score, and a summary of the vulnerability. Leverage key insights such as CISA KEV, 
+> Tell me about the log4j vulnerability. Include the CVE number, CVSS score, and a summary of the vulnerability. Provide recommendations on what I need to do to remediate this vulnerability. Check if I have any open cases or if my scc shows any alerts related to it
 
 * Understanding Campaigns + Hunting Packages (Operational / Tactical)
 > Based on this report <insert link>, summarise the report for a threat intelligence analyst. Please output the following: - any ttps/behaviours in the report - any indicators / iocs in the report in a table format. If there are any TTPs that we can use, convert them into a cyber threat hunting package based on YARA-L. Leverage Sysmon event data primarily when creating YARA-L rules
