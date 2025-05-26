@@ -1,5 +1,14 @@
 #!/usr/bin/env node
 
+/**
+ * VirusTotal MCP Server - Production Version
+ * 
+ * A Model Context Protocol server for VirusTotal API integration
+ * Supports: Livehunt rulesets and IOC Collections
+ * 
+ * Usage: VIRUSTOTAL_API_KEY="your-key" node server.js
+ */
+
 const readline = require('readline');
 const https = require('https');
 
@@ -9,7 +18,7 @@ class VirusTotalMCPServer {
     this.tools = [
       {
         name: "create_hunting_ruleset",
-        description: "Create a new hunting ruleset in VirusTotal Livehunt",
+        description: "Create a new hunting ruleset in VirusTotal Livehunt with YARA rules",
         inputSchema: {
           type: "object",
           properties: {
@@ -19,12 +28,12 @@ class VirusTotalMCPServer {
             },
             rules: {
               type: "string", 
-              description: "YARA rules content"
+              description: "YARA rules content (VT module will be auto-imported)"
             },
             enabled: {
               type: "boolean",
-              description: "Whether the ruleset should be enabled",
-              default: true
+              description: "Whether the ruleset should be enabled (default: false for safety)",
+              default: false
             }
           },
           required: ["name", "rules"]
@@ -32,7 +41,7 @@ class VirusTotalMCPServer {
       },
       {
         name: "create_collection",
-        description: "Create a new collection in VirusTotal",
+        description: "Create a new IOC collection in VirusTotal. IOCs (Indicators of Compromise) are security artifacts like domains, URLs, IP addresses, and file hashes.",
         inputSchema: {
           type: "object",
           properties: {
@@ -43,6 +52,26 @@ class VirusTotalMCPServer {
             description: {
               type: "string",
               description: "Description of the collection"
+            },
+            domains: {
+              type: "array",
+              items: { type: "string" },
+              description: "Domain names - e.g., ['malicious-site.com', 'phishing.net']"
+            },
+            urls: {
+              type: "array", 
+              items: { type: "string" },
+              description: "URLs - e.g., ['https://evil.com/malware.exe', 'http://phishing.site/login']"
+            },
+            ip_addresses: {
+              type: "array",
+              items: { type: "string" },
+              description: "IP addresses - e.g., ['192.168.1.100', '10.0.0.50']"
+            },
+            file_hashes: {
+              type: "array",
+              items: { type: "string" },
+              description: "File hashes (SHA256/SHA1/MD5) - e.g., ['3e3e34d158db5a552483e76bb895b9d6e...']"
             }
           },
           required: ["name"]
@@ -57,7 +86,7 @@ class VirusTotalMCPServer {
     this.rl = readline.createInterface({
       input: process.stdin,
       output: process.stdout,
-      terminal: false  // Important: disable terminal mode for piped input
+      terminal: false
     });
     
     this.rl.on('line', (line) => {
@@ -65,19 +94,15 @@ class VirusTotalMCPServer {
         const message = JSON.parse(line.trim());
         this.handleMessage(message);
       } catch (error) {
-        console.error('Parse error:', error.message); // Debug to stderr
         this.sendError(-32700, "Parse error", null);
       }
     });
     
-    // Keep process alive
     process.stdin.resume();
   }
 
   async handleMessage(message) {
     const { method, params, id } = message;
-    
-    console.error(`Handling method: ${method}`); // Debug output
     
     try {
       switch (method) {
@@ -94,7 +119,6 @@ class VirusTotalMCPServer {
           this.sendError(-32601, "Method not found", id);
       }
     } catch (error) {
-      console.error('Handle error:', error); // Debug output
       this.sendError(-32603, "Internal error", id);
     }
   }
@@ -107,9 +131,7 @@ class VirusTotalMCPServer {
 
     this.sendResponse({
       protocolVersion: "2024-11-05",
-      capabilities: {
-        tools: {}
-      },
+      capabilities: { tools: {} },
       serverInfo: {
         name: "virustotal-mcp-server",
         version: "1.0.0"
@@ -118,9 +140,7 @@ class VirusTotalMCPServer {
   }
 
   async handleToolsList(id) {
-    this.sendResponse({
-      tools: this.tools
-    }, id);
+    this.sendResponse({ tools: this.tools }, id);
   }
 
   async handleToolCall(params, id) {
@@ -140,21 +160,12 @@ class VirusTotalMCPServer {
           return;
       }
       
-      // Format response based on success/failure
-      let responseText;
-      if (result.success) {
-        responseText = `✅ Success!\n\n${JSON.stringify(result.data, null, 2)}`;
-      } else {
-        responseText = `❌ API Error (${result.statusCode})\n\n${JSON.stringify(result.error || result.data, null, 2)}`;
-      }
+      const responseText = result.success 
+        ? `✅ Success!\n\n${JSON.stringify(result.data, null, 2)}`
+        : `❌ API Error (${result.statusCode})\n\n${JSON.stringify(result.error || result.data, null, 2)}`;
       
       this.sendResponse({
-        content: [
-          {
-            type: "text",
-            text: responseText
-          }
-        ]
+        content: [{ type: "text", text: responseText }]
       }, id);
     } catch (error) {
       this.sendError(-32603, `Tool execution failed: ${error.message}`, id);
@@ -162,62 +173,37 @@ class VirusTotalMCPServer {
   }
 
   async createHuntingRuleset(args) {
-    const { name, rules, enabled = true } = args;
+    const { name, rules, enabled = false } = args;
     
-    // Ensure VT module import is included for advanced features
-    let processedRules = rules;
-    if (!rules.includes('import "vt"')) {
-      processedRules = 'import "vt"\n' + rules;
-    }
+    // Auto-import VT module for advanced features
+    let processedRules = rules.includes('import "vt"') ? rules : `import "vt"\n${rules}`;
     
-    // Append identification to rule name
-    // REMOVE THIS LINE if you don't want the "-Elevate2025" suffix:
+    // Add identification suffix
     const finalName = `${name}-Elevate2025`;
     
-    // VirusTotal Livehunt API expects a specific JSON structure
     const postData = JSON.stringify({
       data: {
         type: "hunting_ruleset",
         attributes: {
-          name: finalName, // CHANGE back to 'name' if you removed the suffix above
+          name: finalName,
           rules: processedRules,
           enabled: enabled,
-          match_object_type: "file",  // Required field - can be file, url, domain, ip
-          limit: 100  // Optional - max matches per day
+          match_object_type: "file",
+          limit: 100
         }
       }
     });
     
-    const options = {
-      hostname: 'www.virustotal.com',
-      port: 443,
-      path: '/api/v3/intelligence/hunting_rulesets',
-      method: 'POST',
-      headers: {
-        'x-apikey': this.apiKey,
-        'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(postData)
-      }
-    };
-    
-    return this.makeHTTPSRequest(options, postData);
+    return this.makeRequest('/api/v3/intelligence/hunting_rulesets', 'POST', postData);
   }
 
   async createCollection(args) {
-    const { 
-      name, 
-      description = '', 
-      domains = [], 
-      urls = [], 
-      ip_addresses = [], 
-      file_hashes = [] 
-    } = args;
+    const { name, description = '', domains = [], urls = [], ip_addresses = [], file_hashes = [] } = args;
     
-    // Check if this is an empty collection (no IOCs provided)
+    // Validate that at least one IOC is provided
     const hasIOCs = domains.length > 0 || urls.length > 0 || ip_addresses.length > 0 || file_hashes.length > 0;
     
     if (!hasIOCs) {
-      // Return user-friendly error instead of trying to create empty collection
       return {
         success: false,
         statusCode: 400,
@@ -228,149 +214,137 @@ class VirusTotalMCPServer {
       };
     }
     
-    // Append identification to collection name and description
-    // REMOVE THESE 2 LINES if you don't want the "-Elevate2025" suffix and auto-description:
+    // Add identification
     const finalName = `${name}-Elevate2025`;
-    const finalDescription = description ? `${description} (automatically created via cline / mcp)` : 'automatically created via cline / mcp';
+    const finalDescription = description 
+      ? `${description} (automatically created via cline / mcp)` 
+      : 'automatically created via cline / mcp';
     
-    // Build relationships object for IOCs
+    // Build relationships
     const relationships = {};
     
     if (domains.length > 0) {
-      relationships.domains = {
-        data: domains.map(domain => ({
-          type: "domain",
-          id: domain
-        }))
-      };
+      relationships.domains = { data: domains.map(domain => ({ type: "domain", id: domain })) };
     }
     
     if (urls.length > 0) {
-      relationships.urls = {
-        data: urls.map(url => ({
-          type: "url",
-          url: url
-        }))
-      };
+      relationships.urls = { data: urls.map(url => ({ type: "url", url: url })) };
     }
     
     if (ip_addresses.length > 0) {
-      relationships.ip_addresses = {
-        data: ip_addresses.map(ip => ({
-          type: "ip_address",
-          id: ip
-        }))
-      };
+      relationships.ip_addresses = { data: ip_addresses.map(ip => ({ type: "ip_address", id: ip })) };
     }
     
     if (file_hashes.length > 0) {
-      relationships.files = {
-        data: file_hashes.map(hash => ({
-          type: "file",
-          id: hash
-        }))
-      };
+      relationships.files = { data: file_hashes.map(hash => ({ type: "file", id: hash })) };
     }
     
-    // Create collection with IOCs using relationships approach
     const postData = JSON.stringify({
       data: {
         type: "collection",
         attributes: {
-          name: finalName, // CHANGE back to 'name' if you removed the suffix above
-          description: finalDescription // CHANGE back to 'description' if you removed the auto-description above
+          name: finalName,
+          description: finalDescription
         },
         relationships: relationships
       }
     });
     
-    const options = {
-      hostname: 'www.virustotal.com',
-      port: 443,
-      path: '/api/v3/collections',
-      method: 'POST',
-      headers: {
-        'x-apikey': this.apiKey,
-        'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(postData)
-      }
-    };
-    
-    return this.makeHTTPSRequest(options, postData);
+    return this.makeRequest('/api/v3/collections', 'POST', postData);
   }
 
-  makeHTTPSRequest(options, postData = null) {
+  makeRequest(path, method, postData = null) {
     return new Promise((resolve, reject) => {
+      const options = {
+        hostname: 'www.virustotal.com',
+        port: 443,
+        path: path,
+        method: method,
+        headers: {
+          'x-apikey': this.apiKey,
+          'Content-Type': 'application/json'
+        }
+      };
+      
+      if (postData) {
+        options.headers['Content-Length'] = Buffer.byteLength(postData);
+      }
+      
       const req = https.request(options, (res) => {
-        let data = '';
+        const chunks = [];
+        let totalLength = 0;
         
         res.on('data', (chunk) => {
-          data += chunk;
+          chunks.push(chunk);
+          totalLength += chunk.length;
         });
         
         res.on('end', () => {
           try {
-            const response = JSON.parse(data);
-            
-            if (res.statusCode >= 200 && res.statusCode < 300) {
+            // Handle HTTP 204 No Content (empty response body is expected)
+            if (res.statusCode === 204) {
               resolve({
                 success: true,
                 statusCode: res.statusCode,
-                data: response
+                data: null,
+                error: null
               });
-            } else {
-              resolve({
-                success: false,
-                statusCode: res.statusCode,
-                error: response.error || response,
-                data: response
-              });
+              return;
             }
+            
+            // Efficiently concatenate chunks
+            const responseBody = totalLength > 0 ? Buffer.concat(chunks, totalLength).toString() : '';
+            
+            // Handle empty response bodies for other success codes
+            if (!responseBody && res.statusCode >= 200 && res.statusCode < 300) {
+              resolve({
+                success: true,
+                statusCode: res.statusCode,
+                data: {},
+                error: null
+              });
+              return;
+            }
+            
+            // Parse JSON response
+            const response = responseBody ? JSON.parse(responseBody) : {};
+            
+            resolve({
+              success: res.statusCode >= 200 && res.statusCode < 300,
+              statusCode: res.statusCode,
+              data: response,
+              error: res.statusCode >= 400 ? (response.error || response) : null
+            });
+            
           } catch (error) {
-            reject(new Error(`Failed to parse response: ${error.message}`));
+            const snippet = chunks.length > 0 
+              ? Buffer.concat(chunks, Math.min(totalLength, 200)).toString()
+              : '(empty)';
+            reject(new Error(`Failed to parse response (status: ${res.statusCode}): ${error.message}. Response body snippet: "${snippet}"`));
           }
         });
       });
       
-      req.on('error', (error) => {
-        reject(new Error(`Request failed: ${error.message}`));
-      });
+      req.on('error', (error) => reject(new Error(`Request failed: ${error.message}`)));
+      req.setTimeout(30000, () => req.destroy(new Error('Request timeout')));
       
-      if (postData) {
-        req.write(postData);
-      }
-      
+      if (postData) req.write(postData);
       req.end();
     });
   }
 
   sendResponse(result, id) {
-    const response = {
-      jsonrpc: "2.0",
-      result,
-      id
-    };
-    console.log(JSON.stringify(response));
+    console.log(JSON.stringify({ jsonrpc: "2.0", result, id }));
   }
 
   sendError(code, message, id) {
-    const response = {
-      jsonrpc: "2.0",
-      error: { code, message },
-      id
-    };
-    console.log(JSON.stringify(response));
+    console.log(JSON.stringify({ jsonrpc: "2.0", error: { code, message }, id }));
   }
 }
 
-// Start the server
+// Start server
 const server = new VirusTotalMCPServer();
 
-// Handle process termination
-process.on('SIGINT', () => {
-  process.exit(0);
-});
-
-process.on('SIGTERM', () => {
-  process.exit(0);
-});
+// Graceful shutdown
+process.on('SIGINT', () => process.exit(0));
+process.on('SIGTERM', () => process.exit(0));
