@@ -4,3 +4,9 @@
 [submodule "ai-runbooks"]
 	path = ai-runbooks
 	url = https://github.com/repulsivityy/ai-runbooks.git
+[submodule "github-mcp-server"]
+	path = github-mcp-server
+	url = https://github.com/repulsivityy/github-mcp-server.git
+[submodule "additional_mcp_servers/opencti-mcp"]
+	path = additional_mcp_servers/opencti-mcp
+	url = https://github.com/repulsivityy/opencti-mcp.git
