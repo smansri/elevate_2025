@@ -139,3 +139,6 @@ dmypy.json
 
 # Misc
 .DS_Store
+
+# Google docs related
+*.gdoc
