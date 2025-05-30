@@ -1,0 +1,40 @@
+rule vt_malicious_file_verdict {
+
+  meta:
+    author = "@cmmartin"
+    description = "Matches UDM PROCESS_ Events against VT File Metadata Enrichment for known Malicious Verdicts."
+    severity = "HIGH"
+    priority = "HIGH"
+
+  events:
+    (
+        $e.metadata.event_type = "PROCESS_LAUNCH" or
+        $e.metadata.event_type = "PROCESS_OPEN" or
+        $e.metadata.event_type = "PROCESS_INJECTION" or
+        $e.metadata.event_type = "PROCESS_MODULE_LOAD" or
+        $e.metadata.event_type = "PROCESS_TERMINATION" or
+        $e.metadata.event_type = "PROCESS_UNCATEGORIZED"
+    )
+    $e.target.process.file.security_result.threat_verdict = "MALICIOUS"
+    $e.target.process.file.sha256 = $hash and $e.target.process.file.sha256 != ""    
+    $e.target.file.last_seen_time.seconds = 60 * 60 * 24 * 30
+
+    // placeholder variables     
+    $e.principal.hostname = $asset
+    $e.target.file.sha256 = $target_hash
+    $e.target.user.userid = $user
+
+  match:
+    $asset over 1m
+
+  outcome:
+    $risk_score = max(
+        75 +
+        if($e.security_result.action = "ALLOW", 10) -
+        if($e.security_result.action = "BLOCK", 10)   
+    )
+    $oc_tags = array_distinct($e.target.process.file.tags)
+
+  condition:
+    $e
+}
