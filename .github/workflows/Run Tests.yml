@@ -20,7 +20,7 @@ permissions:
 
 defaults:  
   run:
-    working-directory: ./detection-as-code/content_manager 
+    working-directory: ./detection-as-code
 
 jobs:
   run-unit-tests:
