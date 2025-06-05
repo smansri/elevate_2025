@@ -48,27 +48,31 @@ sequenceDiagram
 
     %% Step 1: Analyse Campaign Report
     Cline->>GTI: get_collection_report, get_entities_related_to_a_collection, get_collection_timeline_events, search_threats, get_threat_intel
-    Extract threat actors, malwares, ttps. Extract any YARA rules from the report
+    Extract the report details, such as TTPs, behavioural indicators, and IOCs from the report.
 
     %% Step 2: Search TIP
     Cline->>TIP: get_latest_reports, search_indicators, search_malware, search_threat_actors
-    Enrich information from Step 1 from TIP. 
+    Enrich the information from Step 1 from the TIP with any new TTPs, indicators or malwares.  
 
-    %% Step 3: Rule Development
-    Note: Draft YARA-L Rule based on the TTPs found in the report and present to user
+    %% Step 3: Analyse the TTPs and behaviours retrieved from Step 1 and Step 2
+    Cline->>Analyst: Present the TTPs and behaviours to the analyst for review and ask for confirmation to proceed.
 
-    %% Step 4: Ask User
-    Cline->>User: Ask the user to review the YARA-L rules created. 
+    %% Step 4: Rule Development
+    Using the information from Step 3, draft a YARA-L rule based on the ttps and behaviours and present it to the user. Use the YARA-L style guide from here: elevate_2025/prompts for elevate/SECOPS_YARAL_STYLE_GUIDE.md
+
+    %% Step 5: Ask User
+    Cline->>Analyst: Ask the user to review the YARA-L rules created. 
     
-    %% Step 5: Commit the YARA-L Rules to Repository
-    Cline->>Github: create_or_update_file in google_secops/rules repository
+    %% Step 6: Commit the YARA-L Rules to Repository
+    Cline->>Github: create_or_update_file in google_secops/rules repository and commit them to the repository
 
     (OPTIONAL) 
-    %% Step 6: Extract YARA rules from Campaign Report or TIP if any
+    %% Step 7: If there are any YARA rules in the report, create a YARA rule in virustotal-mcp. 
     Cline->>GTI: get_collection_report, get_entities_related_to_a_collection, get_collection_timeline_events, search_threats, get_threat_intel
+    Note, leverage the hunting_rulesets relationship in the `get_collection_report` tool 	
     Cline->>TIP: search_indicators, search_malware, search_threat_actors
     
-    %% Step 7: Create Livehunt Rules in Google Threat Intelligence
+    %% Step 8: Create Livehunt Rules in Google Threat Intelligence
     Cline->>VT `create_hunting_ruleset`
 
     Cline->>Developer/Engineer: attempt_completion(result="Hunting Package created.")
