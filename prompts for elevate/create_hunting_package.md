@@ -15,7 +15,6 @@ This runbook covers the insight from
 *   `${RULE_LOCATION}`: Location of the Rules to be deployed to
 *   `${THREAT_INTEL_PLATFORM}`: The Threat Intel Platform for other sightings / additional enrichment
 
-
 ## Tools
 
 *   `gti-mcp`: `get_collection_report` `get_entities_related_to_a_collection`, `get_collection_timeline_events`, `search_threats`, `get_threat_intel` (to get information on report)
