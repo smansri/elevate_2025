@@ -66,8 +66,8 @@ jobs:
       - name: Update reference lists in Google SecOps based on files in main branch
         run: python -m content_manager reference-lists update
 
-      #- name: Update data tables in Google SecOps based on files in main branch
-      #  run: python -m content_manager data-tables update
+      - name: Update data tables in Google SecOps based on files in main branch
+        run: python -m content_manager data-tables update
 
       - name: Update rules in Google SecOps based on files in main branch
         run: python -m content_manager rules update
