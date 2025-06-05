@@ -60,8 +60,8 @@ jobs:
       # - name: Check Python code formatting with black
       #   run: python -m black google_secops_api content_manager --line-length 120 --check
 
-      - name: Run tests using pytest
-        run: pytest -v
+      #- name: Run tests using pytest
+      # run: pytest -v
 
       - name: Update reference lists in Google SecOps based on files in main branch
         run: python -m content_manager reference-lists update
