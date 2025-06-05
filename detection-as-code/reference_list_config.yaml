@@ -1,0 +1,7 @@
+Known_Mal_Hashes:
+  description: For Testing
+  resource_name: projects/651850292640/locations/us/instances/84cfb81b-b702-4249-a6d0-3167312684b5/referenceLists/Known_Mal_Hashes
+  revision_create_time: '2025-04-01T15:46:09.403519Z'
+  rule_associations_count: null
+  rules: null
+  syntax_type: REFERENCE_LIST_SYNTAX_TYPE_PLAIN_TEXT_STRING
