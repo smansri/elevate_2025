@@ -22,7 +22,7 @@ Most of the folders will have it's own readme / instruction guide, taken from th
 4. Python 3.11 or greater
 5. Credentials / API tokens for the integrations (SecOps, Google Threat Intelligence, Github, etc)
 
-## How to begin
+## Quick Start
 1. Clone this repository
-  - this will also include Github Actions for the DaC portion
+    - This will also include Github Actions for the DaC portion
 2. Update your cline settings. look at the example_cline_mcp_settings.json can be found 
