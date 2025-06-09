@@ -1,31 +1,29 @@
 # GTI Hunting MCP Server
 
-A Model Context Protocol (MCP) server that provides integration with VirusTotal API endpoints for creating hunting rulesets and IOC collections.
+A Model Context Protocol (MCP) server that provides integration with Google Threat Intelligence API endpoints for creating hunting rulesets and IOC collections.
 
 ## Features
 
 - **Zero Dependencies**: Built using only Node.js built-in modules
 - **Cross-Platform**: Works on macOS, Linux, and Windows
-- **VirusTotal Integration**: 
-  - Create hunting rulesets in VirusTotal Livehunt with YARA rules
+- **GTI Integration**: 
+  - Create hunting rulesets in Livehunt with YARA rules
   - Create IOC collections with domains, URLs, IP addresses, and file hashes
 
 ## Prerequisites
 
 - Node.js 18.0.0 or higher
-- VirusTotal API key with appropriate permissions
-- VirusTotal Enterprise account (recommended for Livehunt features)
+- GTI API key with appropriate permissions
 
 ## Setup
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/gti-hunting-mcp-server.git
-   cd gti-hunting-mcp-server
+   git clone https://github.com/repulsivityy/elevate_2025
+   cd additional_mcp_servers/gti-hunting-mcp-server
    ```
 
-2. **Get your VirusTotal API key**:
-   - Sign up at [VirusTotal](https://www.virustotal.com/)
+2. **Get your GTI API key**:
    - Go to your profile and copy your API key
 
 3. **Set environment variable**:
@@ -43,7 +41,7 @@ A Model Context Protocol (MCP) server that provides integration with VirusTotal 
 
 ```bash
 # Navigate to the project directory
-cd gti-hunting-mcp-server
+cd additional_mcp_servers/gti-hunting-mcp-server
 
 # Start the server
 GTI_APIKEY="your-api-key" node server.js
@@ -52,7 +50,7 @@ GTI_APIKEY="your-api-key" node server.js
 ### Available Tools
 
 #### 1. create_hunting_ruleset
-Creates a new hunting ruleset in VirusTotal Livehunt.
+Creates a new hunting ruleset in Livehunt.
 
 **Parameters:**
 - `name` (required): Name of the hunting ruleset
@@ -60,7 +58,7 @@ Creates a new hunting ruleset in VirusTotal Livehunt.
 - `enabled` (optional): Whether the ruleset should be enabled (default: false)
 
 #### 2. create_collection
-Creates a new IOC collection in VirusTotal.
+Creates a new IOC collection in Google Threat Intelligence.
 
 **Parameters:**
 - `name` (required): Name of the collection
@@ -100,11 +98,10 @@ This server works with any MCP-compatible client. Refer to your client's documen
 
 - **"Wrong API key" error (401)**
   - Verify your API key is correct
-  - Check your VirusTotal account is active
 
 ### Permission Errors
 - **"Access denied" error (403)**
-  - Livehunt requires VirusTotal Enterprise or Premium account
+  - Livehunt requires VirusTotal Enterprise / Google Threat Intelligence account
   - Verify your API key has the necessary permissions
 
 ### IOC Collection Errors
@@ -115,7 +112,7 @@ This server works with any MCP-compatible client. Refer to your client's documen
 ### Connection Issues
 - **Request timeout or network errors**
   - Check your internet connection
-  - Verify VirusTotal service status
+  - Verify Google Threat Intelligence service status
   - Ensure no firewall is blocking HTTPS connections
 
 ### Server Issues
@@ -127,27 +124,15 @@ This server works with any MCP-compatible client. Refer to your client's documen
 ## Important Notes
 
 - **Auto-tagging**: All created items are automatically tagged with "-Elevate2025" suffix and "automatically created via cline / mcp" in descriptions
-- **VT Module**: YARA rules automatically include `import "vt"` for advanced VirusTotal features
+- **VT Module**: YARA rules automatically include `import "vt"` for advanced GTI features
 - **Safety**: Hunting rulesets are created as disabled by default
 - **No Persistence**: The server is stateless and doesn't store any data locally
 
-## Rate Limits
-
-VirusTotal API has rate limits:
-- **Public API**: 4 requests per minute
-- **Premium API**: Higher limits based on your subscription
-
-## Security Notes
-
-- Never commit your API key to version control
-- Use environment variables for API key storage
-- The server only makes outbound HTTPS requests to VirusTotal
-- No data persistence - all operations are stateless
 
 ## API Reference
 
-- [VirusTotal Livehunt API](https://docs.virustotal.com/reference/api-livehunt)
-- [VirusTotal Collections API](https://docs.virustotal.com/reference/collections-create)
+- [Google Threat Intelligence Livehunt API](https://gtidocs.virustotal.com/reference/create-hunting-ruleset)
+- [Google Threat Intelligence Collections API](https://gtidocs.virustotal.com/reference/create-ioc-collection)
 - [MCP Protocol Specification](https://modelcontextprotocol.io/docs/specification)
 
 ## License
