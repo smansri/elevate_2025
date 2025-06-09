@@ -23,13 +23,13 @@ This runbook leverages AI to extract information about a report, and analyse the
 *   `github-mcp`: `create_or_update_file` (for version control)
 `create_detection_rule`
 *   `secops-mcp`: `search_security_events` (for testing), `validate_udm_query` (if available), `list_security_rules` (to check existing rules)
-*   `virustotal-mcp`: `create_hunting_ruleset`, `create_collection`
+*   `gti-hunting-mcp-server`: `create_hunting_ruleset`, `create_collection`
 
 ## Workflow Steps & Diagram
 
 1.  **Campaign Input:** Provide the `${CAMPAIGN_REPORT}` to extract the TTPs from a Campaign report from GTI using `get_collection_report` `get_entities_related_to_a_collection`, `get_collection_timeline_events`, `search_threats`, `get_threat_intel`, `get_hunting_ruleset`
 2.  **Additional Sightings:** Checks against `${THREAT_INTEL_PLATFORM}` for additional enrichment or other sightings using `get_latest_reports`, `search_indicators`, `search_malware`, `search_threat_actors`, `list_attack_patterns`, `get_campaigns_by_name`
-3.  **Deployment of YARA-L Rules**: Creates a new rule in `${REPO_LOCATION}` using `create_or_update_file`, leveraging the 
+3.  **Deployment of YARA-L Rules**: Creates a new rule in `${REPO_LOCATION}` using `create_or_update_file`, leveraging the github-mcp tool.
 4.  **Deployment of YARA Rules**: Creates a Livehunt Rule in Google Threat Intelligence using `create_hunting_ruleset`
 
 ```{mermaid}
@@ -37,12 +37,11 @@ sequenceDiagram
     participant security_engineer, threat_hunter
     participant Cline as Cline (MCP Client)
     participant SIEM as secops-mcp
-    participant VersionControl as Git 
-    participant CI_CD as CI/CD Pipeline (Conceptual)
+    participant  as Git 
     participant SOAR as secops-soar (Optional)
     participant GTI as gti-mcp
     participant TIP as opencti-mcp
-    participant VT as virustotal-mcp
+    participant VT as gti-hunting-mcp-server
 
     security_engineer/threat_hunter->>Cline: Start Detection-as-Code Workflow\nInput: RULE_IDEA, LOG_SOURCES, TEST_DATA...
 
@@ -70,7 +69,7 @@ sequenceDiagram
     Cline->>Analyst: Summarise the report to the analyst, listing all threat actors, malwares, vulnerabilities to the analyst. Show all IOCs in a table format
 
     (OPTIONAL) 
-    %% Step 8: If there are any YARA rules in the report, create a YARA rule in virustotal-mcp. Make sure it if from the YARA rule, specifically from the `get_hunting_ruleset`
+    %% Step 8: If there are any YARA rules in the report, create a YARA rule in gti-hunting-mcp-server. Make sure it if from the YARA rule, specifically from the `get_hunting_ruleset`
     Cline->>GTI: get_collection_report, get_entities_related_to_a_collection, get_collection_timeline_events, search_threats, get_threat_intel, get_hunting_ruleset
     Note, use the hunting_rulesets relationship in the `get_collection_report` tool 	
     Cline->>TIP: search_indicators, search_malware, search_threat_actors
