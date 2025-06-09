@@ -1,20 +1,20 @@
 #!/usr/bin/env node
 
 /**
- * VirusTotal MCP Server - Production Version
+ * GTI Hunting MCP Server - Production Version
  * 
  * A Model Context Protocol server for VirusTotal API integration
  * Supports: Livehunt rulesets and IOC Collections
  * 
- * Usage: VIRUSTOTAL_API_KEY="your-key" node server.js
+ * Usage: GTI_APIKEY="your-key" node server.js
  */
 
 const readline = require('readline');
 const https = require('https');
 
-class VirusTotalMCPServer {
+class GTIHuntingMCPServer {
   constructor() {
-    this.apiKey = process.env.VIRUSTOTAL_API_KEY;
+    this.apiKey = process.env.GTI_APIKEY;
     this.tools = [
       {
         name: "create_hunting_ruleset",
@@ -125,7 +125,7 @@ class VirusTotalMCPServer {
 
   async handleInitialize(params, id) {
     if (!this.apiKey) {
-      this.sendError(-32602, "VIRUSTOTAL_API_KEY environment variable not set", id);
+      this.sendError(-32602, "GTI_APIKEY environment variable not set", id);
       return;
     }
 
@@ -133,7 +133,7 @@ class VirusTotalMCPServer {
       protocolVersion: "2024-11-05",
       capabilities: { tools: {} },
       serverInfo: {
-        name: "virustotal-mcp-server",
+        name: "gti-hunting-mcp-server",
         version: "1.0.0"
       }
     }, id);
@@ -343,7 +343,7 @@ class VirusTotalMCPServer {
 }
 
 // Start server
-const server = new VirusTotalMCPServer();
+const server = new GTIHuntingMCPServer();
 
 // Graceful shutdown
 process.on('SIGINT', () => process.exit(0));

@@ -3,10 +3,11 @@
 const https = require('https');
 
 function checkRulesets() {
-  const apiKey = process.env.VIRUSTOTAL_API_KEY;
+  const apiKey = process.env.GTI_APIKEY;
   
   if (!apiKey) {
-    console.log('❌ Please set VIRUSTOTAL_API_KEY environment variable');
+    console.log('❌ Please set GTI_APIKEY environment variable');
+    console.log('Usage: GTI_APIKEY="your-key" node check-rulesets.js');
     process.exit(1);
   }
   

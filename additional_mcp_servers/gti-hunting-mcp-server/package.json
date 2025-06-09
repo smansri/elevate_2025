@@ -1,0 +1,16 @@
+{
+  "name": "gti-hunting-mcp-server",
+  "version": "1.0.0",
+  "description": "MCP Server for VirusTotal API integration - GTI Hunting capabilities",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "secure": "node server-secure.js"
+  },
+  "keywords": ["mcp", "gti", "hunting", "security", "threat-intelligence"],
+  "author": "Your Name",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
