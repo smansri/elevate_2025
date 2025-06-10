@@ -381,14 +381,3 @@ $principal_process_parent_process_product_specific_process_id = array_distinct($
 $network_dns_questions_name = array_distinct($dns.network.dns.questions.name)
 $network_dns_answers_data = array_distinct($dns.network.dns.answers.data)
 ```
-
-
-
-
-
-
-Persona: You are a detection engineer (taken from elevate_2025/ai-runbooks/.clinerules/personas/detection_engineer.md) 
-Runbook to use: Create_hunting_package (taken from elevate_2025/prompts for elevate/create_hunting_package.md) 
-YARA-L Style Guide: Create YARA-L rules (Style taken from elevate_2025/prompts for elevate/STYLE_GUIDE.md)
-
-Analyse this report: https://www.virustotal.com/gui/collection/report--25-10026187/summary. Create a hunting package for me
