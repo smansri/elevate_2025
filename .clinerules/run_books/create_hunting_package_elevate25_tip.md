@@ -57,13 +57,13 @@ sequenceDiagram
     Cline->>Analyst: Present the TTPs and behaviours to the analyst for review and ask for confirmation to proceed.
 
     %% Step 4: Rule Development
-    Using the information from Step 3, draft a YARA-L rule based on the ttps and behaviours and present it to the user. Use the YARA-L style guide titled "SECOPS_YARAL_STYLE_GUIDE.md", "YARAL_SYNTAX.md", "OVERVIEW_OF_YARAL_LANGUAGE" from elevate2025/.clinerules. Append the "-elevate2025" to the fiulename. 
+    Using the information from Step 3, draft a YARA-L rule based on the ttps and behaviours and present it to the user. Use the YARA-L style guide titled "SECOPS_YARAL_STYLE_GUIDE.md", "YARAL_SYNTAX.md", "OVERVIEW_OF_YARAL_LANGUAGE" from elevate2025/.clinerules. Append the "_elevate2025" to the filename for YARA-L rules
 
     %% Step 5: Ask User
     Cline->>Analyst: Ask the user to review the YARA-L rules created. 
     
     %% Step 6: Commit the YARA-L Rules to Repository
-    Cline->>Github: create_or_update_file in ${REPO_LOCATION} and commit them to the repository 
+    Cline->>Github: Ask the user if they want to commit to a new branch or to main. create_or_update_file in ${REPO_LOCATION} and commit them to the repository. 
 
     %% Step 7: Show all IOCs to the user
     Cline->>Analyst: Summarise the report to the analyst, listing all threat actors, malwares, vulnerabilities to the analyst. Show all IOCs in a table format
