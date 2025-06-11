@@ -70,3 +70,6 @@ toto_test_rule:
   revision_id: v_1741347010_816127000
   run_frequency: LIVE
   type: SINGLE_EVENT
+new_rule:
+  alerting: false
+  enabled: true
