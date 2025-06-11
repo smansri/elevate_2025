@@ -1,0 +1,13 @@
+rule test_rule {
+  meta:
+  author = "Terraform"
+  severity = "MEDIUM"
+
+  events:
+  $userid = $e.principal.user.userid
+
+  match: $userid over 10m
+
+  condition: $e
+
+}
