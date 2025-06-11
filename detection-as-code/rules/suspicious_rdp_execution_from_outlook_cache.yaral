@@ -1,0 +1,59 @@
+/*
+ * Copyright 2025 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+rule suspicious_rdp_execution_from_outlook_cache {
+  meta:
+    author = "Google Cloud Security"
+    description = "Detects execution of .rdp files from common Microsoft Outlook cache/temporary internet file locations, potentially indicating a malicious RDP file delivered via email."
+    rule_id = "mr_a1b2c3d4-e5f6-7890-1234-567890abcdef01" // Example UUID, will be unique
+    rule_name = "suspicious_rdp_execution_from_outlook_cache"
+    tactic = "TA0001" // Initial Access
+    technique = "T1566.001" // Phishing: Spearphishing Attachment
+    type = "alert"
+    data_source = "microsoft sysmon, microsoft windows events, edr"
+    severity = "High"
+    priority = "High"
+    reference = "GTI Report: report--25-10015981 (Windows Remote Desktop Protocol Remote to Rogue)"
+
+  events:
+    $proc.metadata.event_type = "PROCESS_LAUNCH"
+    // Process being launched is an .rdp file
+    $proc.principal.process.file.full_path = /\.rdp$/ nocase
+
+    // Check if the .rdp file path matches common Outlook cache patterns
+    (
+      re.regex($proc.principal.process.file.full_path, `\\AppData\\Local\\Microsoft\\Windows\\(INetCache|Temporary Internet Files)\\Content\.Outlook\\[A-Z0-9]{8}\\[^\\]{1,255}\.rdp$`) nocase
+      or re.regex($proc.principal.process.file.full_path, `\\AppData\\Local\\Packages\\Microsoft\.Outlook_[a-zA-Z0-9]{1,50}\\.{0,120}\\[^\\]{1,80}\.rdp$`) nocase
+      or re.regex($proc.principal.process.file.full_path, `\\AppData\\Local\\Microsoft\\Olk\\Attachments\\([^\\\\]{1,50}\\){0,5}[^\\\\]{1,80}\.rdp$`) nocase
+    )
+
+    $proc.principal.user.userid = $user_id
+    $proc.principal.hostname = $hostname
+
+  match:
+    $user_id, $hostname over 5m
+
+  outcome:
+    $risk_score = 85
+    $principal_process_path = array_distinct($proc.principal.process.file.full_path)
+    $principal_user_id = array_distinct($user_id)
+    $principal_hostname = array_distinct($hostname)
+    $event_count = count_distinct($proc.metadata.id)
+    $tactic = "TA0001"
+    $technique = "T1566.001"
+
+  condition:
+    $proc
+}
