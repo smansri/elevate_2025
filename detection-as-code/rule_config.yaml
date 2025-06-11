@@ -22,6 +22,18 @@ my_first_rule:
   revision_id: v_1740671206_426175000
   run_frequency: LIVE
   type: SINGLE_EVENT
+new_rule:
+  alerting: false
+  archive_time: null
+  archived: false
+  create_time: '2025-06-11T23:49:42.599519Z'
+  enabled: true
+  id: ru_cdb7e3ca-d69d-4556-8213-2c21184dd466
+  resource_name: projects/1091494787075/locations/europe/instances/dfe4cad1-ebb8-455d-8f0b-79861f8dade7/rules/ru_cdb7e3ca-d69d-4556-8213-2c21184dd466
+  revision_create_time: '2025-06-11T23:49:42.599519Z'
+  revision_id: v_1749685782_599519000
+  run_frequency: LIVE
+  type: SINGLE_EVENT
 rule_gcp_project_creation:
   alerting: true
   archive_time: null
@@ -70,6 +82,3 @@ toto_test_rule:
   revision_id: v_1741347010_816127000
   run_frequency: LIVE
   type: SINGLE_EVENT
-new_rule:
-  alerting: false
-  enabled: true
