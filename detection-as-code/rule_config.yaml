@@ -5,7 +5,7 @@ Cryptocurrency_Active_Mining_Detection:
   create_time: '2023-11-18T14:26:40.231295Z'
   enabled: true
   id: ru_c36488a1-e466-41e3-a927-bac0941ef7cd
-  resource_name: projects/1091494787075/locations/eu/instances/dfe4cad1-ebb8-455d-8f0b-79861f8dade7/rules/ru_c36488a1-e466-41e3-a927-bac0941ef7cd
+  resource_name: projects/1091494787075/locations/europe/instances/dfe4cad1-ebb8-455d-8f0b-79861f8dade7/rules/ru_c36488a1-e466-41e3-a927-bac0941ef7cd
   revision_create_time: '2023-11-18T14:26:40.231295Z'
   revision_id: v_1700317600_231295000
   run_frequency: LIVE
@@ -17,7 +17,7 @@ my_first_rule:
   create_time: '2025-02-27T15:46:46.426175Z'
   enabled: false
   id: ru_58d88637-3817-4001-a833-99fc23f16a40
-  resource_name: projects/1091494787075/locations/eu/instances/dfe4cad1-ebb8-455d-8f0b-79861f8dade7/rules/ru_58d88637-3817-4001-a833-99fc23f16a40
+  resource_name: projects/1091494787075/locations/europe/instances/dfe4cad1-ebb8-455d-8f0b-79861f8dade7/rules/ru_58d88637-3817-4001-a833-99fc23f16a40
   revision_create_time: '2025-02-27T15:46:46.426175Z'
   revision_id: v_1740671206_426175000
   run_frequency: LIVE
@@ -29,7 +29,7 @@ rule_gcp_project_creation:
   create_time: '2023-10-09T12:44:10.056175Z'
   enabled: true
   id: ru_429f241f-8d55-4553-8bc1-764eb00ea272
-  resource_name: projects/1091494787075/locations/eu/instances/dfe4cad1-ebb8-455d-8f0b-79861f8dade7/rules/ru_429f241f-8d55-4553-8bc1-764eb00ea272
+  resource_name: projects/1091494787075/locations/europe/instances/dfe4cad1-ebb8-455d-8f0b-79861f8dade7/rules/ru_429f241f-8d55-4553-8bc1-764eb00ea272
   revision_create_time: '2023-10-09T12:44:10.056175Z'
   revision_id: v_1696855450_056175000
   run_frequency: LIVE
@@ -41,7 +41,7 @@ rule_manygoodnews:
   create_time: '2023-11-10T16:27:12.691327Z'
   enabled: true
   id: ru_82df511d-f234-46b4-9745-7f8229806b13
-  resource_name: projects/1091494787075/locations/eu/instances/dfe4cad1-ebb8-455d-8f0b-79861f8dade7/rules/ru_82df511d-f234-46b4-9745-7f8229806b13
+  resource_name: projects/1091494787075/locations/europe/instances/dfe4cad1-ebb8-455d-8f0b-79861f8dade7/rules/ru_82df511d-f234-46b4-9745-7f8229806b13
   revision_create_time: '2023-11-10T16:33:23.766927Z'
   revision_id: v_1699634003_766927000
   run_frequency: LIVE
@@ -53,7 +53,7 @@ test_rule:
   create_time: '2025-02-20T15:52:28.268191Z'
   enabled: false
   id: ru_2987c836-7080-4a8c-96c2-93436713ced8
-  resource_name: projects/1091494787075/locations/eu/instances/dfe4cad1-ebb8-455d-8f0b-79861f8dade7/rules/ru_2987c836-7080-4a8c-96c2-93436713ced8
+  resource_name: projects/1091494787075/locations/europe/instances/dfe4cad1-ebb8-455d-8f0b-79861f8dade7/rules/ru_2987c836-7080-4a8c-96c2-93436713ced8
   revision_create_time: '2025-02-20T16:09:33.876335Z'
   revision_id: v_1740067773_876335000
   run_frequency: DAILY
@@ -65,8 +65,11 @@ toto_test_rule:
   create_time: '2025-03-07T11:30:10.816127Z'
   enabled: false
   id: ru_8aaffe5f-768f-47a9-9136-280e9d8aac97
-  resource_name: projects/1091494787075/locations/eu/instances/dfe4cad1-ebb8-455d-8f0b-79861f8dade7/rules/ru_8aaffe5f-768f-47a9-9136-280e9d8aac97
+  resource_name: projects/1091494787075/locations/europe/instances/dfe4cad1-ebb8-455d-8f0b-79861f8dade7/rules/ru_8aaffe5f-768f-47a9-9136-280e9d8aac97
   revision_create_time: '2025-03-07T11:30:10.816127Z'
   revision_id: v_1741347010_816127000
   run_frequency: LIVE
   type: SINGLE_EVENT
+new_rule:
+  alerting: false
+  enabled: true
