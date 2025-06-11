@@ -1,2 +1,15 @@
 rule new_rule {
+meta:
+  author = "Seifeddin MANSRI"
+  description = "Detect any events associated with the IP address 172.16.0.4, security result action is ALLOW and target location name is us-central1-a"
+events:
+  $e.principal.ip = "172.16.0.4"
+  $e.security_result.action = "ALLOW"
+  $e.target.location.name = "us-central1-a"
+outcome:
+  $event_type = $e.metadata.event_type
+  $log_type = $e.metadata.log_type
+  $hostname = $e.principal.hostname
+condition:
+  $e
 }
